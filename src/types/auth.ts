@@ -1,4 +1,4 @@
-export type UserType = 'residential' | 'commercial';
+export type UserType = 'residential' | 'commercial' | 'cooperative';
 
 export interface UserData {
   type: UserType;

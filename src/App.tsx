@@ -24,17 +24,13 @@ export default function App() {
               <Route
                 path="/pontos-coleta"
                 element={
-                  <PrivateRoute>
-                    <CollectionPoints />
-                  </PrivateRoute>
+                  <CollectionPoints />
                 }
               />
               <Route
                 path="/pontos-descarte"
                 element={
-                  <PrivateRoute>
                     <CollectionPointsCooperative />
-                  </PrivateRoute>
                 }
               />
               <Route

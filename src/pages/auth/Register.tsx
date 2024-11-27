@@ -11,7 +11,7 @@ const steps = ['type', 'info', 'address', 'confirmation'] as const;
 type Step = typeof steps[number];
 
 const baseSchema = z.object({
-  type: z.enum(['residential', 'commercial'] as const),
+  type: z.enum(['residential', 'commercial', 'cooperative'] as const),
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'A senha deve ter no mínimo 6 caracteres'),
   name: z.string().min(3, 'Nome muito curto'),
@@ -30,6 +30,7 @@ type RegisterFormData = z.infer<typeof baseSchema>;
 export function Register() {
   const [currentStep, setCurrentStep] = useState<Step>('type');
   const [userType, setUserType] = useState<UserType | null>(null);
+  const [materials, setMaterials] = useState<string[]>([]);
   const navigate = useNavigate();
 
   const {
@@ -43,29 +44,51 @@ export function Register() {
     resolver: zodResolver(baseSchema),
   });
 
+  const addMaterial = (material: string) => {
+    if (material && !materials.includes(material)) {
+      setMaterials([...materials, material]);
+    }
+  };
+
+
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const fullAddress = `${data.address}, ${data.number}${
-        data.complement ? `, ${data.complement}` : ''
-      }`;
-  
-      const requestBody = {
-        email: data.email,
-        name: data.name,
-        type: data.type,
-        address: fullAddress,
-        phone: data.phone,
-        document: data.document,
-        password: data.password,
-      };
-  
-      console.log('Enviando:', requestBody);
-  
-      const response = await api.post('/users', requestBody, {
-          headers: {'ngrok-skip-browser-warning': 'true'}
-      });
-  
-      console.log('Resposta da API:', response.data);
+      if (userType === 'cooperative') {
+        const cooperativeData = {
+          corporate_name: data.name,
+          address: data.address,
+          cnpj: data.document,
+          phone: data.phone,
+          materials,
+          open_time: "08:00:00",
+          close_time: "18:00:00",
+        };
+        console.log('Cooperative:', cooperativeData);
+        await api.post('/cooperatives', cooperativeData);
+      } else {
+        const fullAddress = `${data.address}, ${data.number}${
+          data.complement ? `, ${data.complement}` : ''
+        }`;
+    
+        const requestBody = {
+          email: data.email,
+          name: data.name,
+          type: data.type,
+          address: fullAddress,
+          phone: data.phone,
+          document: data.document,
+          password: data.password,
+        };
+    
+        console.log('Enviando:', requestBody);
+    
+        const response = await api.post('/users', requestBody, {
+            headers: {'ngrok-skip-browser-warning': 'true'}
+        });
+    
+        console.log('Resposta da API:', response.data);
+      }
+      
       navigate('/login'); 
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
@@ -198,8 +221,33 @@ export function Register() {
                   </p>
                 </div>
               </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setUserType('cooperative');
+                  setValue('type', 'cooperative');
+                  nextStep();
+                }}
+                className={`p-6 border-2 rounded-lg flex flex-col items-center gap-4 hover:border-green-500 transition-colors ${
+                  userType === 'cooperative'
+                    ? 'border-green-500 bg-green-50'
+                    : 'border-gray-200'
+                }`}
+              >
+                <Building2 className="w-12 h-12 text-green-600" />
+                <div className="text-center">
+                  <h3 className="font-semibold text-lg">Cooperativa Reciclagem</h3>
+                  <p className="text-sm text-gray-600">
+                   Para destinação final dos resíduos sólidos para reciclagem
+                  </p>
+                </div>
+              </button>
             </div>
           )}
+
+          {/* Materiais para Cooperativas */}
+        
 
           {/* Personal Information Step */}
           {currentStep === 'info' && (
@@ -278,6 +326,18 @@ export function Register() {
                   </p>
                 )}
               </div>
+
+              {currentStep === 'info' && userType === 'cooperative' && (
+            <div>
+              <label>Materiais</label>
+              <input onBlur={(e) => addMaterial(e.target.value)} />
+              <div>
+                {materials.map((material) => (
+                  <span key={material}>{material}</span>
+                ))}
+              </div>
+            </div>
+          )}
             </div>
           )}
 

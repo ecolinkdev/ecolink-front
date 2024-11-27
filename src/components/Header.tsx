@@ -30,6 +30,19 @@ export function Header() {
             <Link to="/" className="hover:text-green-200 transition-colors">
               Início
             </Link>
+            <Link
+                  to="/pontos-coleta"
+                  className="hover:text-green-200 transition-colors"
+                >
+                  Pontos de Coleta
+                </Link>
+                <Link
+                  to="/pontos-descarte"
+                  className="block hover:text-green-200 transition-colors py-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Pontos de Descarte
+                </Link>
             {isAuthenticated && (
               <>
                 <Link
@@ -44,19 +57,7 @@ export function Header() {
                 >
                   Minhas Coletas
                 </Link>
-                <Link
-                  to="/pontos-coleta"
-                  className="hover:text-green-200 transition-colors"
-                >
-                  Pontos de Coleta
-                </Link>
-                <Link
-                  to="/pontos-descarte"
-                  className="block hover:text-green-200 transition-colors py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Pontos de Descarte
-                </Link>
+                
               </>
             )}
             <Link to="/login" className="hover:text-green-200 transition-colors">
@@ -75,6 +76,20 @@ export function Header() {
             >
               Início
             </Link>
+            <Link
+                  to="/pontos-coleta"
+                  className="block hover:text-green-200 transition-colors py-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Pontos de Coleta
+                </Link>
+                <Link
+                  to="/pontos-descarte"
+                  className="block hover:text-green-200 transition-colors py-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Pontos de Descarte
+                </Link>
             {isAuthenticated && (
               <>
                 <Link
@@ -91,20 +106,7 @@ export function Header() {
                 >
                   Minhas Coletas
                 </Link>
-                <Link
-                  to="/pontos-coleta"
-                  className="block hover:text-green-200 transition-colors py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Pontos de Coleta
-                </Link>
-                <Link
-                  to="/pontos-descarte"
-                  className="block hover:text-green-200 transition-colors py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Pontos de Descarte
-                </Link>
+                
               </>
             )}
             <Link
