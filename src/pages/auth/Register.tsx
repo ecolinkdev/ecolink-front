@@ -54,9 +54,12 @@ export function Register() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       if (userType === 'cooperative') {
+        const fullAddress = `${data.address}, ${data.number} ${data.complement} ${data.complement}, ${data.city}-${data.state}, ${data.zipCode}`;
+
+
         const cooperativeData = {
           corporate_name: data.name,
-          address: data.address,
+          address: fullAddress,
           cnpj: data.document,
           phone: data.phone,
           materials,
@@ -66,7 +69,7 @@ export function Register() {
         console.log('Cooperative:', cooperativeData);
         await api.post('/cooperatives', cooperativeData);
       } else {
-        const fullAddress = `${data.address}, ${data.number} ${data.complement ? `, ${data.complement}, ${data.city}-${data.state}, ${data.zipCode}` : ''}`;
+        const fullAddress = `${data.address}, ${data.number} ${data.complement} ${data.complement}, ${data.city}-${data.state}, ${data.zipCode}`;
     
         const requestBody = {
           email: data.email,
