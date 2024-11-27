@@ -66,9 +66,7 @@ export function Register() {
         console.log('Cooperative:', cooperativeData);
         await api.post('/cooperatives', cooperativeData);
       } else {
-        const fullAddress = `${data.address}, ${data.number}${
-          data.complement ? `, ${data.complement}` : ''
-        }`;
+        const fullAddress = `${data.address}, ${data.number} ${data.complement ? `, ${data.complement}, ${data.city}-${data.state}, ${data.zipCode}` : ''}`;
     
         const requestBody = {
           email: data.email,
